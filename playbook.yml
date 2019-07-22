@@ -1,0 +1,39 @@
+---
+- hosts: all
+  sudo: true
+  tasks:
+    - name: update apt cache
+      apt: update_cache=yes
+    - name: install required packages
+      apt: name={{ item }} state=present
+      with_items:
+        - git
+        - curl
+        - apt-transport-https
+
+    - name: add apt key for nodesource
+      apt_key: url=https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+
+    - name: add repo for nodesource
+      apt_repository:
+            repo: 'deb https://deb.nodesource.com/node_0.10 jessie main' 
+            update_cache: yes
+
+    - name: install nodejs
+      apt: name=nodejs
+
+    - name: Ansible copy files from a directory to remote server
+      copy:
+        src: nci-ansible-ui
+        dest: /srv/
+        # /Users/mdtutorials2/Documents/Ansible/tmp
+          #    - name: install simplemachines forum engine
+          #    - name: install barbearclassico configuration 
+          #    - name: create database user 
+          #    - name: import database from backup
+      # - name: install mysql backup
+      # git: repo=https://github.com/nunogrl/mysqlbackup.git dest=/opt
+      #    - name: install barbearclassico theme
+      # git: repo=https://github.com/nunogrl/mysqlbackup.git dest=/srv/??  version=master
+
+
